@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:nckh/login_screen.dart';
+import 'package:rock_classifier/login_screen.dart';
 
 class RegisterScreen extends StatefulWidget {
   //Convert to StatefulWidget

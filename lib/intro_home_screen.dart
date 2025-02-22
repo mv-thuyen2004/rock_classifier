@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:nckh/intro_screen.dart'; // Import màn hình OnboardingScreen
+import 'package:rock_classifier/intro_screen.dart'; // Import màn hình OnboardingScreen
 
 class Intro_HomeScreen extends StatefulWidget {
   @override

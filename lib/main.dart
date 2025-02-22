@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:nckh/home_page.dart';
+import 'package:rock_classifier/home_page.dart';
 import 'intro_home_screen.dart'; // Import file mới
 
 void main() {
