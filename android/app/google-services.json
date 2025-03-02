@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "882649857542",
+    "project_id": "rock-classifier-database",
+    "storage_bucket": "rock-classifier-database.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:882649857542:android:b5e473f3eb2b294e590d87",
+        "android_client_info": {
+          "package_name": "com.example.rock_classifier"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCmzafP7F1ReUx8EqU12m-zdHa-a-yof04"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
