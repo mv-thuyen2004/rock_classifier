@@ -1,13 +1,14 @@
 {
   "project_info": {
-    "project_number": "882649857542",
-    "project_id": "rock-classifier-database",
-    "storage_bucket": "rock-classifier-database.firebasestorage.app"
+    "project_number": "737676321511",
+    "firebase_url": "https://nhandienda-default-rtdb.firebaseio.com",
+    "project_id": "nhandienda",
+    "storage_bucket": "nhandienda.firebasestorage.app"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:882649857542:android:b5e473f3eb2b294e590d87",
+        "mobilesdk_app_id": "1:737676321511:android:12f448ee3171e58feb7842",
         "android_client_info": {
           "package_name": "com.example.rock_classifier"
         }
@@ -15,7 +16,7 @@
       "oauth_client": [],
       "api_key": [
         {
-          "current_key": "AIzaSyCmzafP7F1ReUx8EqU12m-zdHa-a-yof04"
+          "current_key": "AIzaSyCvtNk3dZhIayPQ7bTAjkva27EtVnwG5ws"
         }
       ],
       "services": {
