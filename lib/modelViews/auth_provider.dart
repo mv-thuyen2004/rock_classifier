@@ -1,48 +1,91 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:rock_classifier/models/user_models.dart';
 
 class AuthProvider with ChangeNotifier {
   final FirebaseAuth _auth = FirebaseAuth.instance;
-  User? _user;
+  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
-  AuthProvider() {
-    _user = _auth.currentUser;
-  }
+  UserModels? _currentUser;
+  UserModels? get currentUser => _currentUser;
 
-  User? get user => _user;
-
-  Future<String?> signIn(String email, String pass) async {
+  Future<String?> signIn(String email, String password) async {
     try {
-      UserCredential userCredential =
-          await _auth.signInWithEmailAndPassword(email: email, password: pass);
-      _user = userCredential.user;
-      notifyListeners();
+      UserCredential result = await _auth.signInWithEmailAndPassword(
+          email: email, password: password);
+      User? user = result.user;
+      if (user != null) {
+        DocumentSnapshot doc =
+            await _firestore.collection('users').doc(user.uid).get();
+
+        if (doc.exists) {
+          _currentUser =
+              UserModels.fromMap(doc.data() as Map<String, dynamic>, user.uid);
+          notifyListeners();
+        } else {
+          return "Không tìm thấy user trong Firestore.";
+        }
+      }
       return null;
-    } catch (e) {
-      return e.toString();
+    } on FirebaseException catch (e) {
+      return "ERROR + ${e.message}";
     }
   }
 
-  Future<String?> signUp(String email, String pass, String pass_2) async {
-    if (pass != pass_2) {
-      return "MẬT KHẨU KHÔNG KHỚP !";
+  Future<String?> signUp(
+      String email, String password, String password_2) async {
+    if (password != password_2) {
+      return "Mật khẩu không khớp ! ";
     }
     try {
-      UserCredential userCredential = await _auth
-          .createUserWithEmailAndPassword(email: email, password: pass);
-      _user = userCredential.user;
-      notifyListeners();
+      UserCredential result = await _auth.createUserWithEmailAndPassword(
+          email: email, password: password);
+      User? user = result.user;
+      if (user != null) {
+        UserModels newUser = UserModels(
+          uid: user.uid,
+          fullName: null,
+          address: null,
+          gmail: user.email,
+          avatar: null,
+          role: "user",
+        );
+        await _firestore.collection('users').doc(user.uid).set(newUser.toMap());
+        _currentUser = newUser;
+        notifyListeners();
+      }
+
       return null;
-    } catch (e) {
-      debugPrint("ERROR : ${e.toString()}");
-      return e.toString();
+    } on FirebaseAuthException catch (e) {
+      String errorMessage;
+      switch (e.code) {
+        case 'invalid-email':
+          errorMessage = 'Email Không hợp lệ';
+          break;
+        case 'email-already-in-use':
+          errorMessage = 'Email đã được sử dụng';
+          break;
+        case 'weak-password':
+          errorMessage = 'Mật khẩu quá yếu (ít nhất phải 6 kí tự)';
+          break;
+        case 'operation-not-allowed':
+          errorMessage = 'Chức năng đăng kí đang bị tắt';
+          break;
+        case 'network-request-failed':
+          errorMessage = 'Không có kết nối mạng';
+          break;
+        default:
+          errorMessage = 'Đã xảy ra lỗi : ${e.message}';
+      }
+      return errorMessage;
     }
   }
 
   Future<void> signOut() async {
     await _auth.signOut();
-    _user = null;
+    _currentUser = null;
     notifyListeners();
   }
 }

@@ -1,78 +1,64 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
+
+final ThemeData brownTheme = ThemeData(
+  useMaterial3: true,
+  primaryColor: Colors.brown,
+  scaffoldBackgroundColor: Colors.grey[100],
+  textTheme: GoogleFonts.robotoTextTheme(),
+  elevatedButtonTheme: ElevatedButtonThemeData(
+    style: ElevatedButton.styleFrom(
+      backgroundColor: Colors.brown[700],
+      padding: const EdgeInsets.symmetric(vertical: 16.0),
+      textStyle: const TextStyle(fontSize: 18),
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(8.0),
+      ),
+    ),
+  ),
+  inputDecorationTheme: InputDecorationTheme(
+    border: OutlineInputBorder(
+      borderRadius: BorderRadius.circular(8.0),
+      borderSide: BorderSide.none,
+    ),
+    filled: true,
+    fillColor: Colors.grey[200],
+    prefixIconColor: Colors.grey[600],
+  ),
+);
 
 final ThemeData primaryTheme = ThemeData(
   primaryColor: Colors.blue,
   scaffoldBackgroundColor: Colors.white,
   textTheme: TextTheme(
-    titleLarge: TextStyle(
-        color: Colors.black,
-        fontSize: 38,
-        fontWeight: FontWeight.bold), //Text loginin
-    titleMedium: TextStyle(
-        color: Colors.black,
-        fontSize: 20,
-        fontWeight: FontWeight.bold), // Text quay lại , trang chủ ...
-    titleSmall: TextStyle(color: Colors.grey, fontSize: 16), // Text input label
-    bodyLarge: TextStyle(color: Colors.black, fontSize: 20),
-    bodySmall: TextStyle(color: Colors.grey, fontSize: 16),
+    displayLarge: TextStyle(),
   ),
   elevatedButtonTheme: ElevatedButtonThemeData(
     style: ElevatedButton.styleFrom(
+      shadowColor: Colors.amber,
       backgroundColor: Color(0xffE57C3B),
       foregroundColor: Colors.white,
       padding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(25.0)),
     ),
   ),
   inputDecorationTheme: InputDecorationTheme(
     border: OutlineInputBorder(
       borderRadius: BorderRadius.all(
-        Radius.circular(16),
+        Radius.circular(25.0),
       ),
     ),
     enabledBorder: OutlineInputBorder(
       borderSide: BorderSide(color: Colors.grey, width: 1),
       borderRadius: BorderRadius.all(
-        Radius.circular(16),
+        Radius.circular(25.0),
       ),
     ),
     focusedBorder: OutlineInputBorder(
       borderSide: BorderSide(color: Colors.blue, width: 2),
       borderRadius: BorderRadius.all(
-        Radius.circular(16),
+        Radius.circular(25.0),
       ),
     ),
   ),
 );
-
-// final ThemeData secondaryTheme = ThemeData(
-//   primaryColor: Colors.red,
-//   scaffoldBackgroundColor: Colors.black,
-//   textTheme: TextTheme(
-//     titleLarge: TextStyle(
-//         color: Colors.white,
-//         fontSize: 36,
-//         fontWeight: FontWeight.bold), //Text loginin
-//     titleMedium: TextStyle(
-//         color: Colors.white,
-//         fontSize: 20,
-//         fontWeight: FontWeight.bold), // Text quay lại , trang chủ ...
-//     bodyLarge: TextStyle(color: Colors.white, fontSize: 20),
-//     bodySmall: TextStyle(color: Colors.grey, fontSize: 16),
-//   ),
-//   elevatedButtonTheme: ElevatedButtonThemeData(
-//       style: ElevatedButton.styleFrom(
-//           backgroundColor: Color(0xffFFC4A4),
-//           foregroundColor: Colors.grey,
-//           padding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-//           shape:
-//               BeveledRectangleBorder(borderRadius: BorderRadius.circular(8)))),
-//   inputDecorationTheme: InputDecorationTheme(
-//       border: OutlineInputBorder(
-//         borderRadius: BorderRadius.circular(8),
-//       ),
-//       focusedBorder: OutlineInputBorder(
-//           borderSide: BorderSide(color: Colors.amber, width: 2)),
-//       enabledBorder: OutlineInputBorder(
-//           borderSide: BorderSide(color: Colors.white, width: 1))),
-// );

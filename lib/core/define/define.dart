@@ -1,1 +1,3 @@
-double WIDGET_ALL = 24; // widget căn lề hai bên
+double marginOfAllApplication = 16.0; // widget căn lề hai bên
+
+

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:rock_classifier/register_screen.dart';
+import 'package:rock_classifier/views/users/register_page.dart';
 
 class OnboardingScreen extends StatefulWidget {
   @override
@@ -174,7 +174,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
   Route _createRoute() {
     return PageRouteBuilder(
       transitionDuration: Duration(milliseconds: 600), //Speed of transition
-      pageBuilder: (context, animation, secondaryAnimation) => RegisterScreen(),
+      pageBuilder: (context, animation, secondaryAnimation) => RegisterPage(),
       transitionsBuilder: (context, animation, secondaryAnimation, child) {
         return FadeTransition(
           //Smooth fade-in effect
