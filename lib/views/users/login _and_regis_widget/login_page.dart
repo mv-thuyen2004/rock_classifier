@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:rock_classifier/modelViews/auth_provider.dart';
-import 'package:rock_classifier/views/admin/home_page_admin.dart';
-import 'package:rock_classifier/views/admin/main_page_admin.dart';
-import 'package:rock_classifier/views/users/home_page_user.dart';
-import 'package:rock_classifier/views/users/register_page.dart';
+import 'package:rock_classifier/core/widgets/password_Field.dart';
+import 'package:rock_classifier/ModelViews/auth_provider.dart';
+import 'package:rock_classifier/Views/admin/main_page_admin.dart';
+import 'package:rock_classifier/Views/users/home_page_user.dart';
+import 'package:rock_classifier/Views/users/login%20_and_regis_widget/register_page.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -14,12 +14,9 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-  bool _obscureText = true;
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   bool _isLoading = false;
-
-  
 
   void handleLogin(BuildContext context) async {
     setState(() {
@@ -36,7 +33,7 @@ class _LoginPageState extends State<LoginPage> {
       _isLoading = false;
     });
     if (error == null) {
-      if (authProvider.currentUser?.role == 'admin') {
+      if (authProvider.currentUser?.role == 'Admin') {
         Navigator.pushReplacement(
           context,
           MaterialPageRoute(
@@ -44,7 +41,7 @@ class _LoginPageState extends State<LoginPage> {
           ),
         );
       }
-      if (authProvider.currentUser?.role == "user") {
+      if (authProvider.currentUser?.role == "User") {
         Navigator.pushReplacement(
           context,
           MaterialPageRoute(
@@ -87,24 +84,8 @@ class _LoginPageState extends State<LoginPage> {
                   ),
                 ),
                 const SizedBox(height: 20),
-                TextFormField(
-                  controller: _passwordController,
-                  obscureText: _obscureText,
-                  decoration: InputDecoration(
-                    hintText: "Password của bạn",
-                    prefixIcon: Icon(Icons.lock),
-                    suffixIcon: IconButton(
-                      onPressed: () {
-                        setState(() {
-                          _obscureText = !_obscureText;
-                        });
-                      },
-                      icon: _obscureText
-                          ? Icon(Icons.visibility)
-                          : Icon(Icons.visibility_off),
-                    ),
-                  ),
-                ),
+                PasswordField(
+                    title: "Password của bạn", controller: _passwordController),
                 Align(
                   alignment: Alignment.centerRight,
                   child: TextButton(
@@ -186,7 +167,7 @@ class _LoginPageState extends State<LoginPage> {
                     const Text("Tạo tài khoản mới ? "),
                     TextButton(
                       onPressed: () {
-                        Navigator.pushReplacement(
+                        Navigator.push(
                           context,
                           MaterialPageRoute(
                             builder: (context) => RegisterPage(),

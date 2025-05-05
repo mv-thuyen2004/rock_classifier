@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:rock_classifier/modelViews/auth_provider.dart';
-import 'package:rock_classifier/views/users/login_page.dart';
+import 'package:rock_classifier/core/widgets/password_Field.dart';
+import 'package:rock_classifier/ModelViews/auth_provider.dart';
+import 'package:rock_classifier/Views/users/login%20_and_regis_widget/login_page.dart';
 
 class RegisterPage extends StatefulWidget {
   const RegisterPage({super.key});
@@ -11,8 +12,6 @@ class RegisterPage extends StatefulWidget {
 }
 
 class _RegisterPageState extends State<RegisterPage> {
-  bool _obscureTextPassword = true;
-  bool _obscureTextConfirmPassword = true;
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   final TextEditingController _confirmPasswordController =
@@ -38,137 +37,37 @@ class _RegisterPageState extends State<RegisterPage> {
       showDialog(
         context: context,
         barrierDismissible: false,
-        builder: (context) {
-          return Dialog(
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(16.0),
-            ),
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 28),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  const Icon(
-                    Icons.check_circle_outline,
-                    size: 64,
-                    color: Colors.green,
-                  ),
-                  const SizedBox(height: 20),
-                  const Text(
-                    "Đăng ký thành công!",
-                    style: TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold,
-                    ),
-                    textAlign: TextAlign.center,
-                  ),
-                  const SizedBox(height: 12),
-                  const Text(
-                    "Chúc mừng bạn đã tạo tài khoản thành công.\nNhấn 'Xác nhận' để tiếp tục.",
-                    style: TextStyle(
-                      fontSize: 16,
-                      color: Colors.black87,
-                      height: 1.5,
-                    ),
-                    textAlign: TextAlign.center,
-                  ),
-                  const SizedBox(height: 28),
-                  SizedBox(
-                    width: double.infinity,
-                    child: ElevatedButton(
-                      onPressed: () {
-                        Navigator.pop(context);
-                        Navigator.pushReplacement(
-                          context,
-                          MaterialPageRoute(builder: (context) => LoginPage()),
-                        );
-                      },
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.green,
-                        padding: const EdgeInsets.symmetric(vertical: 14),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                      ),
-                      child: const Text(
-                        "Xác nhận",
-                        style: TextStyle(
-                          fontSize: 16,
-                          color: Colors.white,
-                          fontWeight: FontWeight.w500,
-                        ),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          );
-        },
+        builder: (context) => InfoDialog(
+          icon: Icons.check_circle_outline,
+          iconColor: Colors.green,
+          title: "Đăng kí thành công",
+          message:
+              "Chúc mừng bạn đã tạo tài khoản thành công. \n Nhấn 'Xác nhận' để tiếp tục.",
+          buttonColor: Colors.green,
+          onPressed: () {
+            Navigator.pop(context);
+            Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => LoginPage(),
+                ));
+          },
+        ),
       );
     } else {
       showDialog(
         context: context,
         barrierDismissible: false,
-        builder: (context) {
-          return Dialog(
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(16.0),
-            ),
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 24),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Icon(
-                    Icons.error_outline,
-                    size: 48,
-                    color: Colors.redAccent,
-                  ),
-                  const SizedBox(height: 16),
-                  const Text(
-                    "Đăng kí không thành công",
-                    style: TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.w600,
-                    ),
-                    textAlign: TextAlign.center,
-                  ),
-                  const SizedBox(height: 12),
-                  Text(
-                    error,
-                    style: TextStyle(
-                      fontSize: 16,
-                      color: Colors.black87,
-                    ),
-                    textAlign: TextAlign.center,
-                  ),
-                  const SizedBox(height: 24),
-                  SizedBox(
-                    width: double.infinity,
-                    child: ElevatedButton(
-                      onPressed: () => Navigator.pop(context),
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.redAccent,
-                        padding: const EdgeInsets.symmetric(vertical: 14),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                      ),
-                      child: Text(
-                        "Xác nhận",
-                        style: TextStyle(
-                            fontSize: 16,
-                            color: Colors.white,
-                            fontWeight: FontWeight.w500),
-                      ),
-                    ),
-                  )
-                ],
-              ),
-            ),
-          );
-        },
+        builder: (context) => InfoDialog(
+          icon: Icons.error_outline,
+          iconColor: Colors.redAccent,
+          title: "Đăng kí thành công",
+          message: error,
+          buttonColor: Colors.redAccent,
+          onPressed: () {
+            Navigator.pop(context);
+          },
+        ),
       );
     }
   }
@@ -202,44 +101,13 @@ class _RegisterPageState extends State<RegisterPage> {
                   ),
                 ),
                 SizedBox(height: MediaQuery.of(context).size.height * 0.025),
-                TextField(
-                  controller: _passwordController,
-                  obscureText: _obscureTextPassword,
-                  decoration: InputDecoration(
-                    hintText: "Nhập mật khẩu của bạn",
-                    prefixIcon: const Icon(Icons.lock),
-                    suffixIcon: IconButton(
-                      icon: Icon(_obscureTextPassword
-                          ? Icons.visibility
-                          : Icons.visibility_off),
-                      onPressed: () {
-                        setState(() {
-                          _obscureTextPassword = !_obscureTextPassword;
-                        });
-                      },
-                    ),
-                  ),
-                ),
+                PasswordField(
+                    controller: _passwordController,
+                    title: "Nhập mật khẩu của bạn"),
                 SizedBox(height: MediaQuery.of(context).size.height * 0.025),
-                TextField(
-                  controller: _confirmPasswordController,
-                  obscureText: _obscureTextConfirmPassword,
-                  decoration: InputDecoration(
-                    hintText: "Xác nhận lại mật khẩu của bạn",
-                    prefixIcon: const Icon(Icons.lock),
-                    suffixIcon: IconButton(
-                      icon: Icon(_obscureTextConfirmPassword
-                          ? Icons.visibility
-                          : Icons.visibility_off),
-                      onPressed: () {
-                        setState(() {
-                          _obscureTextConfirmPassword =
-                              !_obscureTextConfirmPassword;
-                        });
-                      },
-                    ),
-                  ),
-                ),
+                PasswordField(
+                    controller: _confirmPasswordController,
+                    title: "Xác nhận lại mật khẩu"),
                 SizedBox(height: MediaQuery.of(context).size.height * 0.02),
                 RichText(
                   textAlign: TextAlign.center,
@@ -358,6 +226,73 @@ class _RegisterPageState extends State<RegisterPage> {
               ],
             ),
           ),
+        ),
+      ),
+    );
+  }
+}
+
+class InfoDialog extends StatelessWidget {
+  final IconData icon;
+  final Color iconColor;
+  final String title;
+  final String message;
+  final Color buttonColor;
+  final VoidCallback onPressed;
+  const InfoDialog(
+      {super.key,
+      required this.icon,
+      required this.iconColor,
+      required this.title,
+      required this.message,
+      required this.buttonColor,
+      required this.onPressed});
+
+  @override
+  Widget build(BuildContext context) {
+    return Dialog(
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(16.0),
+      ),
+      child: Padding(
+        padding: EdgeInsets.symmetric(horizontal: 20, vertical: 24),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Icon(
+              icon,
+              size: 64,
+              color: iconColor,
+            ),
+            const SizedBox(height: 12),
+            Text(
+              message,
+              style: const TextStyle(
+                  fontSize: 16, color: Colors.black87, height: 1.5),
+              textAlign: TextAlign.center,
+            ),
+            const SizedBox(height: 28),
+            SizedBox(
+              width: double.infinity,
+              child: ElevatedButton(
+                onPressed: onPressed,
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: buttonColor,
+                  padding: const EdgeInsets.symmetric(vertical: 14),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                ),
+                child: const Text(
+                  "Xác nhận",
+                  style: TextStyle(
+                      fontSize: 16,
+                      color: Colors.white,
+                      fontWeight: FontWeight.w500),
+                ),
+              ),
+            ),
+          ],
         ),
       ),
     );

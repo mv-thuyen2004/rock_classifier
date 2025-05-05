@@ -1,7 +1,6 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:rock_classifier/views/admin/home_page_admin.dart';
-import 'package:rock_classifier/views/admin/information_page_admin.dart';
+import 'package:rock_classifier/Views/admin/home_page_admin.dart';
+import 'package:rock_classifier/Views/admin/information_page_admin.dart';
 
 class MainPageAdmin extends StatefulWidget {
   const MainPageAdmin({super.key});

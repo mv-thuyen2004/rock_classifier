@@ -1,3 +1,7 @@
 {
-  "cSpell.words": ["Inforow", "roboto"]
+  "cSpell.words": [
+    "Inforow",
+    "roboto"
+  ],
+  "editor.fontFamily": "'JetBrains Mono'"
 }

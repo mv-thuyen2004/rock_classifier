@@ -2,37 +2,38 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 final ThemeData brownTheme = ThemeData(
-  useMaterial3: true,
-  primaryColor: Colors.brown,
+  visualDensity: VisualDensity.adaptivePlatformDensity,
+  primaryColor: Colors.blueAccent,
   scaffoldBackgroundColor: Colors.grey[100],
-  textTheme: GoogleFonts.robotoTextTheme(),
+  textTheme: TextTheme(
+    titleLarge: TextStyle(
+        fontSize: 20, fontWeight: FontWeight.bold, color: Colors.black87),
+    bodyMedium: TextStyle(fontSize: 16, color: Colors.black54),
+  ),
   elevatedButtonTheme: ElevatedButtonThemeData(
     style: ElevatedButton.styleFrom(
-      backgroundColor: Colors.brown[700],
-      padding: const EdgeInsets.symmetric(vertical: 16.0),
-      textStyle: const TextStyle(fontSize: 18),
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(8.0),
-      ),
+      backgroundColor: Colors.blueAccent,
+      foregroundColor: Colors.white,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+      padding: EdgeInsets.symmetric(vertical: 12),
     ),
   ),
   inputDecorationTheme: InputDecorationTheme(
     border: OutlineInputBorder(
-      borderRadius: BorderRadius.circular(8.0),
-      borderSide: BorderSide.none,
+      borderRadius: BorderRadius.circular(12),
+      borderSide: BorderSide(color: Colors.grey[300]!),
     ),
     filled: true,
-    fillColor: Colors.grey[200],
-    prefixIconColor: Colors.grey[600],
+    fillColor: Colors.grey[50],
+    contentPadding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
   ),
 );
 
 final ThemeData primaryTheme = ThemeData(
+  textTheme: GoogleFonts.robotoTextTheme(),
+  useMaterial3: true,
   primaryColor: Colors.blue,
   scaffoldBackgroundColor: Colors.white,
-  textTheme: TextTheme(
-    displayLarge: TextStyle(),
-  ),
   elevatedButtonTheme: ElevatedButtonThemeData(
     style: ElevatedButton.styleFrom(
       shadowColor: Colors.amber,

@@ -8,5 +8,6 @@
 
   ViewModel: Lớp trung gian giữa View và Model. ViewModel có thể được xem là thành phần thay thế cho Controller trong mô hình MVC. Nó chứa các mã lệnh cần thiết để thực hiện data binding, command. => Xử lí logic
 
-- Quản lí state Provider
+- Quản lí state Provider  
 - Lưu trữ FireBase
+

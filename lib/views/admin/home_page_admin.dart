@@ -2,11 +2,9 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
-import 'package:rock_classifier/core/define/define.dart';
+import 'package:rock_classifier/ModelViews/user_view_model.dart';
+import 'package:rock_classifier/Views/admin/function/function_main/user_data_management/views/user_data_management.dart';
 import 'package:rock_classifier/core/widgets/FunctionButton.dart';
-import 'package:rock_classifier/modelViews/user_provider.dart';
-
-import '../../modelViews/user_provider.dart';
 
 class HomePageAdmin extends StatefulWidget {
   const HomePageAdmin({super.key});
@@ -21,18 +19,17 @@ class _HomePageAdminState extends State<HomePageAdmin> {
     super.initState();
     final uid = FirebaseAuth.instance.currentUser?.uid;
     if (uid != null) {
-      Future.microtask(
-        () {
-          Provider.of<UserProvider>(context, listen: false).fetchUserData(uid);
-        },
-      );
+      WidgetsBinding.instance.addPersistentFrameCallback((_) {
+        if (!mounted) return;
+        Provider.of<UserViewModel>(context, listen: false).fetchUser(uid);
+      });
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    final userProvider = Provider.of<UserProvider>(context);
-    final user = userProvider.user;
+    final userViewModel = Provider.of<UserViewModel>(context);
+    final user = userViewModel.currentUser;
     return Scaffold(
       appBar: AppBar(
         title: Text(
@@ -49,7 +46,7 @@ class _HomePageAdminState extends State<HomePageAdmin> {
       ),
       body: SingleChildScrollView(
         child: Padding(
-          padding: EdgeInsets.all(marginOfAllApplication),
+          padding: EdgeInsets.all(16.0),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -126,7 +123,14 @@ class _HomePageAdminState extends State<HomePageAdmin> {
               const SizedBox(height: 16),
               FunctionButton(
                 text: "Quản lí tài khoản người dùng ",
-                onPressed: () {},
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => UserDataManagement(),
+                    ),
+                  );
+                },
               ),
               FunctionButton(
                 text: "Quản lí dữ liệu đá trong ứng dụng",

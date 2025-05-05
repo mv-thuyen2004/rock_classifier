@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:rock_classifier/core/define/define.dart';
-import 'package:rock_classifier/modelViews/auth_provider.dart';
-import 'package:rock_classifier/modelViews/user_provider.dart';
-import 'package:rock_classifier/views/users/login_page.dart';
+import 'package:rock_classifier/ModelViews/auth_provider.dart';
+import 'package:rock_classifier/ModelViews/user_view_model.dart';
+import 'package:rock_classifier/Views/admin/function/function_info/update_information_admin.dart';
+import 'package:rock_classifier/Views/users/login%20_and_regis_widget/login_page.dart';
 
 class InformationPageAdmin extends StatefulWidget {
   const InformationPageAdmin({super.key});
@@ -15,8 +15,8 @@ class InformationPageAdmin extends StatefulWidget {
 class _InformationPageAdminState extends State<InformationPageAdmin> {
   @override
   Widget build(BuildContext context) {
-    final userProvider = Provider.of<UserProvider>(context);
-    final user = userProvider.user;
+    final userViewModel = Provider.of<UserViewModel>(context);
+    final user = userViewModel.currentUser;
     return Scaffold(
       appBar: AppBar(
         title: const Text(
@@ -28,7 +28,7 @@ class _InformationPageAdminState extends State<InformationPageAdmin> {
       ),
       body: SingleChildScrollView(
         child: Padding(
-          padding: EdgeInsets.all(marginOfAllApplication),
+          padding: EdgeInsets.all(16.0),
           child: Center(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.center,
@@ -88,7 +88,14 @@ class _InformationPageAdminState extends State<InformationPageAdmin> {
                             Icons.arrow_forward_ios,
                             color: Theme.of(context).primaryColor,
                           ),
-                          onTap: () {},
+                          onTap: () {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) =>
+                                      UpdateInformationAdmin(),
+                                ));
+                          },
                         ),
                         const Divider(height: 1),
                         ListTile(
@@ -126,7 +133,7 @@ class _InformationPageAdminState extends State<InformationPageAdmin> {
                   ),
                 ),
                 const SizedBox(height: 30),
-                Container(
+                SizedBox(
                   width: double.infinity,
                   child: ElevatedButton(
                     style: ElevatedButton.styleFrom(

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:rock_classifier/views/users/register_page.dart';
+import 'package:rock_classifier/Views/users/login%20_and_regis_widget/register_page.dart';
 
 class OnboardingScreen extends StatefulWidget {
   @override
