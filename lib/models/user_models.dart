@@ -64,7 +64,3 @@ class UserModels {
     );
   }
 }
-
-// coppyWith : tạo bản sao mới của object , thay đổi một số thuộc tính
-// fromMap : Chuyển dữ liệu (map/json) thành Oject Dart 
-// toMap : Chuyển oject Dart thành map (để lưu hoặc gửi đi)

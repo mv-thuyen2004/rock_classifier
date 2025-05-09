@@ -1,0 +1,1 @@
+D:\dev\rock_classifier\rock_classifier-1\build\app\intermediates\cxx\Debug\2f2b433k\obj\arm64-v8a
