@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:rock_classifier/core/widgets/password_Field.dart';
-import 'package:rock_classifier/ModelViews/auth_provider.dart';
-import 'package:rock_classifier/Views/admin/main_page_admin.dart';
-import 'package:rock_classifier/Views/users/home_page_user.dart';
-import 'package:rock_classifier/Views/users/login%20_and_regis_widget/register_page.dart';
+import 'package:rock_classifier/Core/widgets/password_Field.dart';
+import 'package:rock_classifier/ModelViews/auth_view_model.dart';
+import 'package:rock_classifier/Views/users/login_and_regis_widget/register_page.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -22,9 +20,11 @@ class _LoginPageState extends State<LoginPage> {
     setState(() {
       _isLoading = true;
     });
-    final authProvider = Provider.of<AuthProvider>(context, listen: false);
+    final authProvider = Provider.of<AuthViewModel>(context, listen: false);
 
+    // Gọi hàm signIn với context
     String? error = await authProvider.signIn(
+      context, // Truyền context
       _emailController.text.trim(),
       _passwordController.text.trim(),
     );
@@ -32,27 +32,14 @@ class _LoginPageState extends State<LoginPage> {
     setState(() {
       _isLoading = false;
     });
-    if (error == null) {
-      if (authProvider.currentUser?.role == 'Admin') {
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(
-            builder: (context) => MainPageAdmin(),
-          ),
-        );
-      }
-      if (authProvider.currentUser?.role == "User") {
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(
-            builder: (context) => HomePageUser(),
-          ),
-        );
-      }
-    } else {
-      ScaffoldMessenger.of(context)
-          .showSnackBar(SnackBar(content: Text(error)));
+
+    // Nếu có lỗi, hiển thị thông báo
+    if (error != null) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(error)),
+      );
     }
+    // Không cần xử lý chuyển hướng ở đây vì hàm signIn đã làm việc đó
   }
 
   @override
@@ -78,19 +65,21 @@ class _LoginPageState extends State<LoginPage> {
                 const SizedBox(height: 40),
                 TextFormField(
                   controller: _emailController,
-                  decoration: InputDecoration(
+                  decoration: const InputDecoration(
                     hintText: "Email của bạn",
                     prefixIcon: Icon(Icons.email),
                   ),
                 ),
                 const SizedBox(height: 20),
                 PasswordField(
-                    title: "Password của bạn", controller: _passwordController),
+                  title: "Password của bạn",
+                  controller: _passwordController,
+                ),
                 Align(
                   alignment: Alignment.centerRight,
                   child: TextButton(
                     onPressed: () {},
-                    child: Text(
+                    child: const Text(
                       "Forgot Password?",
                       style: TextStyle(color: Colors.brown),
                     ),
@@ -104,15 +93,15 @@ class _LoginPageState extends State<LoginPage> {
                           handleLogin(context);
                         },
                   child: _isLoading
-                      ? SizedBox(
+                      ? const SizedBox(
                           width: 24,
                           height: 24,
                           child: CircularProgressIndicator(
                             color: Colors.red,
-                            strokeAlign: 2,
+                            strokeWidth: 2,
                           ),
                         )
-                      : Text(
+                      : const Text(
                           "Đăng nhập",
                           style: TextStyle(color: Colors.white),
                         ),
@@ -122,13 +111,13 @@ class _LoginPageState extends State<LoginPage> {
                   children: [
                     const Expanded(child: Divider()),
                     Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 8.0),
+                      padding: const EdgeInsets.symmetric(horizontal: 8.0),
                       child: Text(
                         "- Or login with -",
                         style: TextStyle(color: Colors.grey[600]),
                       ),
                     ),
-                    Expanded(child: Divider())
+                    const Expanded(child: Divider()),
                   ],
                 ),
                 const SizedBox(height: 20),
@@ -137,7 +126,7 @@ class _LoginPageState extends State<LoginPage> {
                   children: [
                     IconButton(
                       onPressed: () {},
-                      icon: Icon(
+                      icon: const Icon(
                         Icons.android,
                         size: 30,
                         color: Colors.green,
@@ -145,22 +134,22 @@ class _LoginPageState extends State<LoginPage> {
                     ),
                     IconButton(
                       onPressed: () {},
-                      icon: Icon(
+                      icon: const Icon(
                         Icons.apple,
                         size: 30,
                       ),
                     ),
                     IconButton(
                       onPressed: () {},
-                      icon: Icon(
+                      icon: const Icon(
                         Icons.facebook,
                         color: Colors.blue,
                         size: 30,
                       ),
                     ),
-                    const SizedBox(height: 20),
                   ],
                 ),
+                const SizedBox(height: 20),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
@@ -170,22 +159,29 @@ class _LoginPageState extends State<LoginPage> {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => RegisterPage(),
+                            builder: (context) => const RegisterPage(),
                           ),
                         );
                       },
-                      child: Text(
+                      child: const Text(
                         "Đăng kí",
                         style: TextStyle(color: Colors.brown),
                       ),
-                    )
+                    ),
                   ],
-                )
+                ),
               ],
             ),
           ),
         ),
       ),
     );
+  }
+
+  @override
+  void dispose() {
+    _emailController.dispose();
+    _passwordController.dispose();
+    super.dispose();
   }
 }

@@ -2,27 +2,18 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:rock_classifier/Core/theme/theme.dart';
+import 'package:rock_classifier/FirebaseService/firebase_rock_service.dart';
 import 'package:rock_classifier/FirebaseService/firebase_service.dart';
-import 'package:rock_classifier/firebase_options.dart';
-import 'package:rock_classifier/Views/admin/function/function_info/update_information_admin.dart';
-import 'package:rock_classifier/Views/admin/function/function_info/update_password_admin/update_password_admin.dart';
-import 'package:rock_classifier/Views/users/intro_widget/intro_screen.dart';
-import 'package:rock_classifier/ModelViews/auth_provider.dart';
-import 'package:rock_classifier/ModelViews/theme_provider.dart';
-import 'package:rock_classifier/ModelViews/user_view_model.dart';
-import 'package:rock_classifier/Views/admin/home_page_admin.dart';
-import 'package:rock_classifier/Views/admin/information_page_admin.dart';
-import 'package:rock_classifier/Views/admin/main_page_admin.dart';
-import 'package:rock_classifier/Views/users/home_page_user.dart';
-import 'package:rock_classifier/Views/users/login%20_and_regis_widget/login_page.dart';
-import 'package:rock_classifier/Views/users/login%20_and_regis_widget/register_page.dart';
-import 'package:google_fonts/google_fonts.dart';
+import 'package:rock_classifier/ModelViews/auth_view_model.dart';
+import 'package:rock_classifier/ModelViews/rock_view_model.dart';
+import 'package:rock_classifier/ModelViews/user_list_view_model.dart';
+import 'package:rock_classifier/Views/admin/function/function_main/rock_data_management/view/rock_list_screen.dart';
+import 'package:rock_classifier/Views/users/login_and_regis_widget/login_page.dart';
 
 import 'ModelViews/theme_provider.dart';
 
 Future<void> main() async {
-  WidgetsFlutterBinding
-      .ensureInitialized(); // khởi tạo đầy đủ các chức năng của Flutter FrameWork
+  WidgetsFlutterBinding.ensureInitialized(); // khởi tạo đầy đủ các chức năng của Flutter FrameWork
   await Firebase.initializeApp(); // Khỏi tạo firebase trong dự án
   runApp(
     MultiProvider(
@@ -30,12 +21,18 @@ Future<void> main() async {
         Provider<FirebaseService>(
           create: (context) => FirebaseService(),
         ),
+        Provider(
+          create: (context) => FirebaseRockService(),
+        ),
+        ChangeNotifierProvider(create: (_) => ThemeProvider()), // Provider cho Themes
         ChangeNotifierProvider(
-            create: (_) => ThemeProvider()), // Provider cho Themes
+          create: (_) => RockViewModel(), // Provider cho hiển thị dùng
+        ),
         ChangeNotifierProvider(
-            create: (_) => AuthProvider()), // Provider cho xác minh login
+          create: (_) => AuthViewModel(),
+        ),
         ChangeNotifierProvider(
-          create: (_) => UserViewModel(), // Provider cho hiển thị dùng
+          create: (_) => UserListViewModel(),
         ),
       ],
       child: MyApp(),
@@ -43,7 +40,6 @@ Future<void> main() async {
   );
 }
 
-// ignore: use_key_in_widget_constructors
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {

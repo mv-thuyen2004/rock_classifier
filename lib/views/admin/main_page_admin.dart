@@ -12,10 +12,18 @@ class MainPageAdmin extends StatefulWidget {
 class _MainPageAdminState extends State<MainPageAdmin> {
   int _selectedIndex = 0;
 
-  final List<Widget> _widgetOptions = [
-    HomePageAdmin(),
-    InformationPageAdmin(),
-  ];
+  // danh sách widget con
+  late final List<Widget> _widgetOptions;
+
+  @override
+  void initState() {
+    super.initState();
+    // Khởi tạo các danh sách widget con
+    _widgetOptions = [
+      const HomePageAdmin(),
+      const InformationPageAdmin(),
+    ];
+  }
 
   void _onItemTapped(int index) {
     setState(() {

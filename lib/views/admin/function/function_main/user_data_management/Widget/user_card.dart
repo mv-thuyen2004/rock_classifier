@@ -17,8 +17,7 @@ class UserCard extends StatelessWidget {
       child: ListTile(
         leading: CircleAvatar(
           radius: 24,
-          backgroundImage:
-              user.avatar != null ? NetworkImage(user.avatar!) : null,
+          backgroundImage: user.avatar != null ? NetworkImage(user.avatar!) : null,
           child: user.avatar == null ? const Icon(Icons.person) : null,
         ),
         title: Text(
@@ -26,7 +25,7 @@ class UserCard extends StatelessWidget {
           style: GoogleFonts.poppins(fontWeight: FontWeight.w600),
         ),
         subtitle: Text(
-          user.gmail ?? 'Chưa có email',
+          user.email ?? 'Chưa có email',
           style: GoogleFonts.poppins(),
         ),
         trailing: IconButton(

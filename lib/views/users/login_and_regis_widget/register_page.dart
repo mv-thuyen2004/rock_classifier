@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:rock_classifier/core/widgets/password_Field.dart';
-import 'package:rock_classifier/ModelViews/auth_provider.dart';
-import 'package:rock_classifier/Views/users/login%20_and_regis_widget/login_page.dart';
+import 'package:rock_classifier/Core/widgets/password_Field.dart';
+import 'package:rock_classifier/ModelViews/auth_view_model.dart';
+import 'package:rock_classifier/Views/users/login_and_regis_widget/login_page.dart';
 
 class RegisterPage extends StatefulWidget {
   const RegisterPage({super.key});
@@ -26,7 +26,7 @@ class _RegisterPageState extends State<RegisterPage> {
   }
 
   void handleCreateAccount(BuildContext context) async {
-    final authProvider = Provider.of<AuthProvider>(context, listen: false);
+    final authProvider = Provider.of<AuthViewModel>(context, listen: false);
     String? error = await authProvider.signUp(
       _emailController.text.trim(),
       _passwordController.text.trim(),
@@ -47,10 +47,11 @@ class _RegisterPageState extends State<RegisterPage> {
           onPressed: () {
             Navigator.pop(context);
             Navigator.pushReplacement(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => LoginPage(),
-                ));
+              context,
+              MaterialPageRoute(
+                builder: (context) => const LoginPage(),
+              ),
+            );
           },
         ),
       );
@@ -61,7 +62,7 @@ class _RegisterPageState extends State<RegisterPage> {
         builder: (context) => InfoDialog(
           icon: Icons.error_outline,
           iconColor: Colors.redAccent,
-          title: "Đăng kí thành công",
+          title: "Đăng kí thất bại",
           message: error,
           buttonColor: Colors.redAccent,
           onPressed: () {
@@ -102,12 +103,14 @@ class _RegisterPageState extends State<RegisterPage> {
                 ),
                 SizedBox(height: MediaQuery.of(context).size.height * 0.025),
                 PasswordField(
-                    controller: _passwordController,
-                    title: "Nhập mật khẩu của bạn"),
+                  controller: _passwordController,
+                  title: "Nhập mật khẩu của bạn",
+                ),
                 SizedBox(height: MediaQuery.of(context).size.height * 0.025),
                 PasswordField(
-                    controller: _confirmPasswordController,
-                    title: "Xác nhận lại mật khẩu"),
+                  controller: _confirmPasswordController,
+                  title: "Xác nhận lại mật khẩu",
+                ),
                 SizedBox(height: MediaQuery.of(context).size.height * 0.02),
                 RichText(
                   textAlign: TextAlign.center,
@@ -115,8 +118,8 @@ class _RegisterPageState extends State<RegisterPage> {
                     style: TextStyle(color: Colors.grey[600], fontSize: 12),
                     children: const [
                       TextSpan(
-                          text:
-                              "Bằng cách nhấp vào nút đăng kí, bạn đồng ý với"),
+                        text: "Bằng cách nhấp vào nút đăng kí, bạn đồng ý với",
+                      ),
                       TextSpan(
                         text: " Điều khoản dịch vụ",
                         style: TextStyle(color: Colors.red),
@@ -130,15 +133,30 @@ class _RegisterPageState extends State<RegisterPage> {
                   ),
                 ),
                 SizedBox(height: MediaQuery.of(context).size.height * 0.025),
-                ElevatedButton(
-                  onPressed: () {
-                    handleCreateAccount(context);
+                Consumer<AuthViewModel>(
+                  builder: (context, authProvider, child) {
+                    return ElevatedButton(
+                      onPressed: authProvider.isLoading
+                          ? null
+                          : () {
+                              handleCreateAccount(context);
+                            },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.brown,
+                        foregroundColor: Colors.white,
+                      ),
+                      child: authProvider.isLoading
+                          ? const SizedBox(
+                              width: 24,
+                              height: 24,
+                              child: CircularProgressIndicator(
+                                color: Colors.white,
+                                strokeWidth: 2,
+                              ),
+                            )
+                          : const Text("Đăng kí"),
+                    );
                   },
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.brown,
-                    foregroundColor: Colors.white,
-                  ),
-                  child: const Text("Đăng kí"),
                 ),
                 SizedBox(height: MediaQuery.of(context).size.height * 0.025),
                 Row(
@@ -148,9 +166,7 @@ class _RegisterPageState extends State<RegisterPage> {
                       padding: const EdgeInsets.symmetric(horizontal: 8.0),
                       child: Text(
                         "- Hoặc là đăng nhập với -",
-                        style: TextStyle(
-                          color: Colors.grey[600],
-                        ),
+                        style: TextStyle(color: Colors.grey[600]),
                       ),
                     ),
                     const Expanded(child: Divider()),
@@ -189,7 +205,7 @@ class _RegisterPageState extends State<RegisterPage> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    const Text("Bạn đã có tài khoản ? "),
+                    const Text("Bạn đã có tài khoản? "),
                     TextButton(
                       onPressed: () {
                         Navigator.push(
@@ -197,7 +213,7 @@ class _RegisterPageState extends State<RegisterPage> {
                           PageRouteBuilder(
                             pageBuilder:
                                 (context, animation, secondaryAnimation) =>
-                                    LoginPage(),
+                                    const LoginPage(),
                             transitionsBuilder: (context, animation,
                                 secondaryAnimation, child) {
                               const begin = Offset(1.0, 0.0);
@@ -222,7 +238,7 @@ class _RegisterPageState extends State<RegisterPage> {
                       child: const Text("Đăng nhập"),
                     ),
                   ],
-                )
+                ),
               ],
             ),
           ),
@@ -239,14 +255,16 @@ class InfoDialog extends StatelessWidget {
   final String message;
   final Color buttonColor;
   final VoidCallback onPressed;
-  const InfoDialog(
-      {super.key,
-      required this.icon,
-      required this.iconColor,
-      required this.title,
-      required this.message,
-      required this.buttonColor,
-      required this.onPressed});
+
+  const InfoDialog({
+    super.key,
+    required this.icon,
+    required this.iconColor,
+    required this.title,
+    required this.message,
+    required this.buttonColor,
+    required this.onPressed,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -255,7 +273,7 @@ class InfoDialog extends StatelessWidget {
         borderRadius: BorderRadius.circular(16.0),
       ),
       child: Padding(
-        padding: EdgeInsets.symmetric(horizontal: 20, vertical: 24),
+        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 24),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
@@ -266,9 +284,21 @@ class InfoDialog extends StatelessWidget {
             ),
             const SizedBox(height: 12),
             Text(
+              title,
+              style: const TextStyle(
+                fontSize: 20,
+                fontWeight: FontWeight.bold,
+                color: Colors.black87,
+              ),
+            ),
+            const SizedBox(height: 8),
+            Text(
               message,
               style: const TextStyle(
-                  fontSize: 16, color: Colors.black87, height: 1.5),
+                fontSize: 16,
+                color: Colors.black87,
+                height: 1.5,
+              ),
               textAlign: TextAlign.center,
             ),
             const SizedBox(height: 28),
@@ -286,9 +316,10 @@ class InfoDialog extends StatelessWidget {
                 child: const Text(
                   "Xác nhận",
                   style: TextStyle(
-                      fontSize: 16,
-                      color: Colors.white,
-                      fontWeight: FontWeight.w500),
+                    fontSize: 16,
+                    color: Colors.white,
+                    fontWeight: FontWeight.w500,
+                  ),
                 ),
               ),
             ),
