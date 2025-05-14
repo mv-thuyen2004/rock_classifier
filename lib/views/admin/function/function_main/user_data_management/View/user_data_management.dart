@@ -3,9 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
-import 'package:rock_classifier/FirebaseService/firebase_service.dart';
 import 'package:rock_classifier/ModelViews/user_list_view_model.dart';
 import 'package:rock_classifier/Models/user_models.dart';
+import 'package:rock_classifier/Views/admin/function/function_main/user_data_management/View/user_detail_screen.dart';
 import 'package:rock_classifier/Views/admin/function/function_main/user_data_management/View/utils._management.dart';
 import 'package:rock_classifier/Views/admin/function/function_main/user_data_management/Widget/user_card.dart';
 
@@ -37,16 +37,8 @@ class _UserDataManagementState extends State<UserDataManagement> {
         }
       });
     });
-    _loadCurrentUserRole();
     WidgetsBinding.instance.addPostFrameCallback((_) {
       Provider.of<UserListViewModel>(context, listen: false).fetachUser();
-    });
-  }
-
-  Future<void> _loadCurrentUserRole() async {
-    final role = await Provider.of<FirebaseService>(context, listen: false).getCurrentUserRole();
-    setState(() {
-      _currentUserRole = role;
     });
   }
 
@@ -59,7 +51,7 @@ class _UserDataManagementState extends State<UserDataManagement> {
     File? tempImage;
     bool isPressed = false;
 
-    bool _isValidEmail(String email) {
+    bool isValidEmail(String email) {
       return RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$').hasMatch(email);
     }
 
@@ -87,7 +79,7 @@ class _UserDataManagementState extends State<UserDataManagement> {
                 ],
               ),
               padding: EdgeInsets.only(
-                bottom: MediaQuery.of(context).viewInsets.bottom,
+                bottom: MediaQuery.of(context).viewInsets.bottom + 24,
                 left: 24,
                 right: 24,
                 top: 32,
@@ -102,7 +94,7 @@ class _UserDataManagementState extends State<UserDataManagement> {
                       children: [
                         Text(
                           "Thêm người dùng",
-                          style: GoogleFonts.poppins(
+                          style: TextStyle(
                             fontSize: 24,
                             fontWeight: FontWeight.w600,
                             color: Colors.black87,
@@ -120,7 +112,7 @@ class _UserDataManagementState extends State<UserDataManagement> {
                       decoration: InputDecoration(
                         labelText: "Họ và tên",
                         prefixIcon: const Icon(Icons.person, color: Color(0xFF3B82F6)),
-                        labelStyle: GoogleFonts.poppins(color: Colors.grey),
+                        labelStyle: TextStyle(color: Colors.grey),
                         filled: true,
                         fillColor: Colors.white70,
                         border: OutlineInputBorder(
@@ -139,7 +131,7 @@ class _UserDataManagementState extends State<UserDataManagement> {
                       decoration: InputDecoration(
                         labelText: "Email",
                         prefixIcon: const Icon(Icons.email, color: Color(0xFF3B82F6)),
-                        labelStyle: GoogleFonts.poppins(color: Colors.grey),
+                        labelStyle: TextStyle(color: Colors.grey),
                         errorText: emailError,
                         filled: true,
                         fillColor: Colors.white70,
@@ -155,7 +147,7 @@ class _UserDataManagementState extends State<UserDataManagement> {
                       keyboardType: TextInputType.emailAddress,
                       onChanged: (value) {
                         setModalState(() {
-                          emailError = _isValidEmail(value) ? null : 'Email không hợp lệ';
+                          emailError = isValidEmail(value) ? null : 'Email không hợp lệ';
                         });
                       },
                     ),
@@ -165,7 +157,7 @@ class _UserDataManagementState extends State<UserDataManagement> {
                       decoration: InputDecoration(
                         labelText: "Địa chỉ",
                         prefixIcon: const Icon(Icons.location_on, color: Color(0xFF3B82F6)),
-                        labelStyle: GoogleFonts.poppins(color: Colors.grey),
+                        labelStyle: TextStyle(color: Colors.grey),
                         filled: true,
                         fillColor: Colors.white70,
                         border: OutlineInputBorder(
@@ -184,7 +176,7 @@ class _UserDataManagementState extends State<UserDataManagement> {
                       decoration: InputDecoration(
                         labelText: "Vai trò",
                         prefixIcon: const Icon(Icons.person, color: Color(0xFF3B82F6)),
-                        labelStyle: GoogleFonts.poppins(color: Colors.grey),
+                        labelStyle: TextStyle(color: Colors.grey),
                         filled: true,
                         fillColor: Colors.white70,
                         border: OutlineInputBorder(
@@ -199,7 +191,7 @@ class _UserDataManagementState extends State<UserDataManagement> {
                       items: ['Admin', 'User', 'Super-User'].map((String role) {
                         return DropdownMenuItem<String>(
                           value: role,
-                          child: Text(role, style: GoogleFonts.poppins()),
+                          child: Text(role),
                         );
                       }).toList(),
                       onChanged: (String? newValue) {
@@ -216,7 +208,7 @@ class _UserDataManagementState extends State<UserDataManagement> {
                       ),
                       label: Text(
                         tempImage == null ? "Chọn ảnh đại diện" : "Đã chọn ảnh",
-                        style: GoogleFonts.poppins(color: Colors.white),
+                        style: TextStyle(color: Colors.white),
                       ),
                       style: ElevatedButton.styleFrom(
                         backgroundColor: const Color(0xFF60A5FA),
@@ -256,7 +248,7 @@ class _UserDataManagementState extends State<UserDataManagement> {
                       onTapDown: (_) => setModalState(() => isPressed = true),
                       onTapUp: (_) async {
                         setModalState(() => isPressed = false);
-                        if (emailController.text.isEmpty || !_isValidEmail(emailController.text)) {
+                        if (emailController.text.isEmpty || !isValidEmail(emailController.text)) {
                           setModalState(() {
                             emailError = 'Vui lòng nhập email hợp lệ';
                           });
@@ -356,8 +348,8 @@ class _UserDataManagementState extends State<UserDataManagement> {
 
   void _showEditUserSheet(BuildContext context, UserModels user) {
     final TextEditingController emailController = TextEditingController(text: user.email);
-    final TextEditingController fullNameController = TextEditingController(text: user.fullName);
-    final TextEditingController addressController = TextEditingController(text: user.address);
+    final TextEditingController fullNameController = TextEditingController(text: user.fullName ?? '');
+    final TextEditingController addressController = TextEditingController(text: user.address ?? '');
     String? avatarUrl = user.avatar;
     String? emailError;
     String? selectedRole = user.role;
@@ -387,7 +379,7 @@ class _UserDataManagementState extends State<UserDataManagement> {
                   ),
                 ],
               ),
-              padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom, left: 24, right: 24, top: 32),
+              padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom + 24, left: 24, right: 24, top: 32),
               child: SingleChildScrollView(
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
@@ -409,7 +401,7 @@ class _UserDataManagementState extends State<UserDataManagement> {
                       decoration: InputDecoration(
                         labelText: "Họ và tên",
                         prefixIcon: const Icon(Icons.person, color: Color(0xFF3B82F6)),
-                        labelStyle: GoogleFonts.poppins(color: Colors.grey),
+                        labelStyle: TextStyle(color: Colors.grey),
                         filled: true,
                         fillColor: Colors.white70,
                         border: OutlineInputBorder(borderRadius: BorderRadius.circular(16), borderSide: BorderSide.none),
@@ -467,7 +459,7 @@ class _UserDataManagementState extends State<UserDataManagement> {
                       decoration: InputDecoration(
                         labelText: "Vai trò",
                         prefixIcon: const Icon(Icons.person, color: Color(0xFF3B82F6)),
-                        labelStyle: GoogleFonts.poppins(color: Colors.grey),
+                        labelStyle: TextStyle(color: Colors.grey),
                         filled: true,
                         fillColor: Colors.white70,
                         border: OutlineInputBorder(
@@ -477,10 +469,10 @@ class _UserDataManagementState extends State<UserDataManagement> {
                         focusedBorder:
                             OutlineInputBorder(borderRadius: BorderRadius.circular(16), borderSide: const BorderSide(color: Color(0xFF3B82F6), width: 2)),
                       ),
-                      items: ['Admin', 'User', 'Super-user'].map((String role) {
+                      items: ['Admin', 'User', 'Super-User'].map((String role) {
                         return DropdownMenuItem<String>(
                           value: role,
-                          child: Text(role, style: GoogleFonts.poppins()),
+                          child: Text(role),
                         );
                       }).toList(),
                       onChanged: (String? newValue) {
@@ -542,7 +534,9 @@ class _UserDataManagementState extends State<UserDataManagement> {
                     ],
                     const SizedBox(height: 24),
                     GestureDetector(
+                      //onTapDown hạ tay xuống
                       onTapDown: (_) => setModalState(() => isPressed = true),
+                      // onTapUp nhấc tay lên
                       onTapUp: (_) async {
                         setModalState(() => isPressed = false);
                         if (emailController.text.isEmpty || !isValidEmail(emailController.text)) {
@@ -576,7 +570,7 @@ class _UserDataManagementState extends State<UserDataManagement> {
                             address: addressController.text,
                             email: emailController.text,
                             avatar: avatarUrl,
-                            role: selectedRole,
+                            role: selectedRole as String,
                             createdAt: user.createdAt,
                           );
                           final viewModel = Provider.of<UserListViewModel>(context, listen: false);
@@ -588,14 +582,14 @@ class _UserDataManagementState extends State<UserDataManagement> {
                           Navigator.pop(context);
                           ScaffoldMessenger.of(context).showSnackBar(
                             SnackBar(
-                              content: Text("Cập nhật người dùng thành công!", style: GoogleFonts.poppins()),
+                              content: Text("Cập nhật người dùng thành công!"),
                               backgroundColor: const Color(0xFF3B82F6),
                             ),
                           );
                         } catch (e) {
                           ScaffoldMessenger.of(context).showSnackBar(
                             SnackBar(
-                              content: Text("Lỗi: $e", style: GoogleFonts.poppins()),
+                              content: Text("Lỗi: $e"),
                               backgroundColor: Colors.redAccent,
                             ),
                           );
@@ -614,6 +608,7 @@ class _UserDataManagementState extends State<UserDataManagement> {
                           borderRadius: BorderRadius.circular(16),
                           boxShadow: [
                             BoxShadow(
+                              // ignore: deprecated_member_use
                               color: Colors.black.withOpacity(isPressed ? 0.1 : 0.3),
                               blurRadius: 10,
                               offset: Offset(0, isPressed ? 2 : 6),
@@ -623,7 +618,7 @@ class _UserDataManagementState extends State<UserDataManagement> {
                         child: Center(
                           child: Text(
                             "Cập nhật",
-                            style: GoogleFonts.poppins(
+                            style: TextStyle(
                               fontSize: 16,
                               fontWeight: FontWeight.w600,
                               color: Colors.white,
@@ -659,8 +654,9 @@ class _UserDataManagementState extends State<UserDataManagement> {
     return Scaffold(
       backgroundColor: const Color(0xFFF8FAFC),
       appBar: AppBar(
-        leading: const BackButton(color: Colors.black87),
-        backgroundColor: Colors.white,
+        centerTitle: true,
+        leading: const BackButton(color: Colors.white),
+        backgroundColor: Color(0xFFF7F7F7),
         elevation: 0,
         flexibleSpace: Container(
           decoration: const BoxDecoration(
@@ -673,8 +669,8 @@ class _UserDataManagementState extends State<UserDataManagement> {
         ),
         title: Text(
           "Quản lí người dùng",
-          style: GoogleFonts.poppins(
-            fontSize: 22,
+          style: TextStyle(
+            fontSize: 20,
             fontWeight: FontWeight.w600,
             color: Colors.white,
           ),
@@ -682,7 +678,9 @@ class _UserDataManagementState extends State<UserDataManagement> {
         actions: [
           IconButton(
             icon: const Icon(Icons.history, color: Colors.white),
-            onPressed: () {},
+            onPressed: () {
+              Provider.of<UserListViewModel>(context, listen: false).fetachUser();
+            },
           ),
         ],
       ),
@@ -715,7 +713,7 @@ class _UserDataManagementState extends State<UserDataManagement> {
                           controller: _searchController,
                           decoration: InputDecoration(
                             hintText: 'Tìm kiếm người dùng',
-                            hintStyle: GoogleFonts.poppins(color: Colors.grey),
+                            hintStyle: TextStyle(color: Colors.grey),
                             prefixIcon: const Icon(Icons.search, color: Colors.grey),
                             border: InputBorder.none,
                             contentPadding: const EdgeInsets.symmetric(vertical: 14),
@@ -746,15 +744,15 @@ class _UserDataManagementState extends State<UserDataManagement> {
                         itemBuilder: (context) => [
                           PopupMenuItem(
                             value: SortOption.createdAt,
-                            child: Text("Theo thời gian tạo", style: GoogleFonts.poppins()),
+                            child: Text("Theo thời gian tạo"),
                           ),
                           PopupMenuItem(
                             value: SortOption.role,
-                            child: Text("Theo vai trò", style: GoogleFonts.poppins()),
+                            child: Text("Theo vai trò"),
                           ),
                           PopupMenuItem(
                             value: SortOption.name,
-                            child: Text("Theo email", style: GoogleFonts.poppins()),
+                            child: Text("Theo email"),
                           ),
                         ],
                       ),
@@ -768,7 +766,7 @@ class _UserDataManagementState extends State<UserDataManagement> {
                   alignment: Alignment.centerLeft,
                   child: Text(
                     "Số lượng người dùng: ${viewModel.users.length}",
-                    style: GoogleFonts.poppins(fontSize: 16),
+                    style: TextStyle(fontSize: 16),
                   ),
                 ),
               ),
@@ -808,6 +806,14 @@ class _UserDataManagementState extends State<UserDataManagement> {
                               final user = viewModel.users[index];
                               return UserCard(
                                 user: user,
+                                onTap: () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (_) => UserDetailScreen(user: user),
+                                    ),
+                                  );
+                                },
                                 onMorePressed: () {
                                   showModalBottomSheet(
                                     context: context,
@@ -822,7 +828,7 @@ class _UserDataManagementState extends State<UserDataManagement> {
                                         children: [
                                           ListTile(
                                             leading: const Icon(Icons.edit, color: Color(0xFF3B82F6)),
-                                            title: Text("Chỉnh sửa", style: GoogleFonts.poppins()),
+                                            title: Text("Chỉnh sửa"),
                                             onTap: () {
                                               Navigator.pop(context);
                                               _showEditUserSheet(context, user);
@@ -830,13 +836,13 @@ class _UserDataManagementState extends State<UserDataManagement> {
                                           ),
                                           ListTile(
                                             leading: const Icon(Icons.delete, color: Colors.redAccent),
-                                            title: Text("Xóa", style: GoogleFonts.poppins()),
+                                            title: Text("Xóa"),
                                             onTap: () {
                                               Navigator.pop(context);
                                               showDialog(
                                                 context: context,
                                                 builder: (context) => AlertDialog(
-                                                  title: Text("Xác nhận xóa", style: GoogleFonts.poppins()),
+                                                  title: Text("Xác nhận xóa"),
                                                   content: Text("Bạn có chắc muốn xóa ${user.email}?"),
                                                   actions: [
                                                     TextButton(
@@ -858,7 +864,7 @@ class _UserDataManagementState extends State<UserDataManagement> {
                                                           Navigator.pop(context);
                                                           ScaffoldMessenger.of(context).showSnackBar(
                                                             SnackBar(
-                                                              content: Text("Lỗi: $e", style: GoogleFonts.poppins()),
+                                                              content: Text("Lỗi: $e"),
                                                               backgroundColor: Colors.redAccent,
                                                             ),
                                                           );
@@ -885,12 +891,11 @@ class _UserDataManagementState extends State<UserDataManagement> {
         },
       ),
       floatingActionButton: Padding(
-        padding: const EdgeInsets.only(bottom: 100),
+        padding: const EdgeInsets.only(bottom: 20),
         child: FloatingActionButton(
           onPressed: () => showAddUserBottomSheet(context),
           backgroundColor: const Color(0xFF3B82F6),
-          elevation: 8,
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(100)),
           child: const Icon(Icons.add, size: 28, color: Colors.white),
         ),
       ),

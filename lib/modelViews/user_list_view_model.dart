@@ -170,13 +170,13 @@ class UserListViewModel extends ChangeNotifier {
   void sortUsers(SortOption option) {
     switch (option) {
       case SortOption.createdAt:
-        _users.sort((a, b) => b.createdAt!.compareTo(a.createdAt!));
+        _users.sort((a, b) => b.createdAt.compareTo(a.createdAt));
         break;
       case SortOption.role:
-        _users.sort((a, b) => a.role!.compareTo(b.role!));
+        _users.sort((a, b) => a.role.compareTo(b.role));
         break;
       case SortOption.name:
-        _users.sort((a, b) => a.email!.compareTo(b.email!));
+        _users.sort((a, b) => a.email.compareTo(b.email));
         break;
     }
     notifyListeners();

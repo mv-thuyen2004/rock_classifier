@@ -26,17 +26,7 @@ class _UpdateInformationAdminState extends State<UpdateInformationAdmin> {
 
     final authViewModel = Provider.of<AuthViewModel>(context, listen: false);
 
-    // Hiển thị loading
-    showDialog(
-      context: context,
-      barrierDismissible: false,
-      builder: (context) => Center(
-        child: CircularProgressIndicator(),
-      ),
-    );
-
     final url = await authViewModel.uploadAvatar(File(pickedFile.path));
-    //  Tắt loading
     Navigator.of(context).pop();
     if (url != null) {
       ScaffoldMessenger.of(context).showSnackBar(
@@ -156,9 +146,12 @@ class _UpdateInformationAdminState extends State<UpdateInformationAdmin> {
                     textStyle: const TextStyle(fontWeight: FontWeight.w600),
                   ),
                   onPressed: () {
-                    showEditUserInfoBottomSheet(context, user);
+                    editUserInfoBottomSheet(context, user);
                   },
-                  child: const Text("Chỉnh sửa"),
+                  child: const Text(
+                    "Chỉnh sửa",
+                    style: TextStyle(color: Colors.blueGrey),
+                  ),
                 ),
               ),
             ],
@@ -232,7 +225,7 @@ class _UpdateInformationAdminState extends State<UpdateInformationAdmin> {
                     children: [
                       _buildListTile(
                         title: "Địa chỉ Email",
-                        value: user.email ?? 'Chưa cập nhật',
+                        value: user.email,
                         onTap: () {},
                       ),
                       InkWell(
@@ -253,7 +246,7 @@ class _UpdateInformationAdminState extends State<UpdateInformationAdmin> {
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               const Text("Mật khẩu", style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500)),
-                              Text("Thay đổi mật khẩu", style: TextStyle(fontSize: 16, color: Colors.teal.shade800)),
+                              Text("Thay đổi mật khẩu", style: TextStyle(fontSize: 16, color: Colors.blueGrey.shade800)),
                             ],
                           ),
                         ),

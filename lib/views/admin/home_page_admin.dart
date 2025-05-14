@@ -21,23 +21,35 @@ class HomePageAdmin extends StatelessWidget {
 
         final user = authViewModel.currentUser!;
         return Scaffold(
-          backgroundColor: Colors.grey[100],
+          backgroundColor: Color(0xFFF7F7F7),
           body: SafeArea(
             child: Padding(
               padding: const EdgeInsets.all(20),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const SizedBox(height: 20),
-                  Text(
-                    'Xin chào Admin',
-                    style: TextStyle(
-                      fontSize: 24,
-                      color: Colors.orange[900],
-                      fontWeight: FontWeight.bold,
+                  Align(
+                    alignment: Alignment.center,
+                    child: Text(
+                      'Trang chủ Admin',
+                      style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600, color: Colors.black87),
                     ),
                   ),
-                  const SizedBox(height: 16),
+                  const SizedBox(height: 20),
+                  Row(
+                    children: [
+                      Icon(
+                        Icons.person,
+                        color: Colors.grey,
+                      ),
+                      const SizedBox(width: 6),
+                      Text(
+                        'Thông tin người dùng',
+                        style: TextStyle(fontSize: 18, color: Colors.grey, fontWeight: FontWeight.bold),
+                      ),
+                    ],
+                  ),
+                  SizedBox(height: 16),
                   Container(
                     padding: const EdgeInsets.all(16),
                     decoration: BoxDecoration(
@@ -54,24 +66,58 @@ class HomePageAdmin extends StatelessWidget {
                     ),
                     child: Row(
                       children: [
-                        CircleAvatar(
-                          radius: 36,
-                          backgroundColor: Colors.orange,
-                          backgroundImage: user.avatar != null ? NetworkImage(user.avatar!) : null,
-                          child: user.avatar == null
-                              ? Icon(
-                                  Icons.person,
-                                  color: Colors.white,
-                                  size: 40,
-                                )
-                              : null,
+                        SizedBox(
+                          width: 72,
+                          height: 72,
+                          child: Stack(
+                            alignment: Alignment.center,
+                            children: [
+                              // Avatar nền
+                              CircleAvatar(
+                                radius: 36,
+                                backgroundColor: Colors.grey,
+                                child: user.avatar == null
+                                    ? Icon(
+                                        Icons.person,
+                                        color: Colors.white,
+                                        size: 40,
+                                      )
+                                    : null,
+                              ),
+                              // Nếu có avatar, tải ảnh từ mạng
+                              if (user.avatar != null)
+                                ClipOval(
+                                  child: Image.network(
+                                    user.avatar!,
+                                    width: 72,
+                                    height: 72,
+                                    fit: BoxFit.cover,
+                                    loadingBuilder: (context, child, loadingProgress) {
+                                      if (loadingProgress == null) return child;
+                                      return Center(
+                                        child: CircularProgressIndicator(
+                                          value: loadingProgress.expectedTotalBytes != null
+                                              ? loadingProgress.cumulativeBytesLoaded / (loadingProgress.expectedTotalBytes ?? 1)
+                                              : null,
+                                          color: Colors.white,
+                                          strokeWidth: 2,
+                                        ),
+                                      );
+                                    },
+                                    errorBuilder: (context, error, stackTrace) {
+                                      return Icon(Icons.error, color: Colors.white);
+                                    },
+                                  ),
+                                ),
+                            ],
+                          ),
                         ),
                         const SizedBox(width: 20),
                         Expanded(
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              rowInfo(label: 'email', value: user.email ?? 'Bạn chưa có email'),
+                              rowInfo(label: 'Email', value: user.email),
                               rowInfo(
                                 label: 'Tên người dùng',
                                 value: user.fullName ?? 'Bạn chưa có tên',
@@ -86,20 +132,19 @@ class HomePageAdmin extends StatelessWidget {
                   const SizedBox(height: 28),
                   Row(
                     children: [
-                      Icon(Icons.grid_view_rounded, color: Colors.orange[900]),
-                      const SizedBox(width: 10),
+                      Icon(
+                        Icons.grid_view_rounded,
+                        color: Colors.grey,
+                      ),
+                      const SizedBox(width: 6),
                       Text(
                         'Chức Năng',
-                        style: TextStyle(
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.orange[900],
-                        ),
+                        style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.grey),
                       ),
                     ],
                   ),
                   SizedBox(height: 16),
-                  functionButton(
+                  FunctionButton(
                     title: 'Quản lí tài khoản người dùng ',
                     onTap: () => Navigator.push(
                       context,
@@ -109,7 +154,7 @@ class HomePageAdmin extends StatelessWidget {
                     ),
                   ),
                   SizedBox(height: 16),
-                  functionButton(
+                  FunctionButton(
                     title: 'Dữ liệu cơ sở trong ứng dụng',
                     onTap: () {
                       Navigator.push(
@@ -120,7 +165,7 @@ class HomePageAdmin extends StatelessWidget {
                     },
                   ),
                   SizedBox(height: 16),
-                  functionButton(
+                  FunctionButton(
                     title: 'Quản lí bài viết',
                     onTap: () {},
                   ),
@@ -134,11 +179,12 @@ class HomePageAdmin extends StatelessWidget {
   }
 }
 
+// ignore: camel_case_types
 class rowInfo extends StatelessWidget {
   final String label;
   final String value;
 
-  const rowInfo({required this.label, required this.value});
+  const rowInfo({super.key, required this.label, required this.value});
 
   @override
   Widget build(BuildContext context) {
@@ -169,55 +215,56 @@ class rowInfo extends StatelessWidget {
   }
 }
 
-// ignore: must_be_immutable
-class functionButton extends StatelessWidget {
+class FunctionButton extends StatelessWidget {
   final String title;
-  VoidCallback onTap;
+  final VoidCallback onTap;
 
-  functionButton({required this.title, required this.onTap});
+  const FunctionButton({
+    super.key,
+    required this.title,
+    required this.onTap,
+  });
 
   @override
   Widget build(BuildContext context) {
-    return InkWell(
-      borderRadius: BorderRadius.circular(16),
-      onTap: () {
-        // Thêm hành động khi nhấn vào
-      },
-      child: Container(
-        width: double.infinity,
-        height: 56,
-        decoration: BoxDecoration(
-          gradient: LinearGradient(
-            colors: [Colors.orange[50]!, Colors.orange[100]!],
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
+    return Container(
+      width: double.infinity,
+      height: 56,
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(20),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black12,
+            blurRadius: 10,
+            offset: Offset(0, 4),
           ),
-          borderRadius: BorderRadius.circular(16),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withOpacity(0.05),
-              blurRadius: 8,
-              spreadRadius: 2,
-              offset: const Offset(0, 4),
+        ],
+        color: Colors.white, // thêm màu nền nếu cần
+      ),
+      child: Material(
+        color: Colors.transparent,
+        child: InkWell(
+          borderRadius: BorderRadius.circular(20),
+          onTap: onTap,
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  title,
+                  style: const TextStyle(
+                    fontSize: 16,
+                    color: Colors.black87,
+                  ),
+                ),
+                Icon(
+                  Icons.arrow_forward,
+                  color: Colors.grey,
+                  size: 20,
+                ),
+              ],
             ),
-          ],
-        ),
-        child: ListTile(
-          title: GestureDetector(
-            onTap: onTap,
-            child: Text(
-              title,
-              style: const TextStyle(
-                fontWeight: FontWeight.w600,
-                fontSize: 16,
-                color: Colors.black87,
-              ),
-            ),
-          ),
-          trailing: Icon(
-            Icons.arrow_forward_ios_outlined,
-            color: Colors.orange[900],
-            size: 20,
           ),
         ),
       ),

@@ -107,8 +107,7 @@ class _UpdatePasswordAdminState extends State<UpdatePasswordAdmin> {
                               ),
                               focusedBorder: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(20),
-                                borderSide: const BorderSide(
-                                    color: Colors.teal, width: 2),
+                                borderSide: const BorderSide(color: Colors.grey, width: 2),
                               ),
                             ),
                           ),
@@ -122,8 +121,7 @@ class _UpdatePasswordAdminState extends State<UpdatePasswordAdmin> {
                               ),
                               focusedBorder: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(20),
-                                borderSide: const BorderSide(
-                                    color: Colors.teal, width: 2),
+                                borderSide: const BorderSide(color: Colors.grey, width: 2),
                               ),
                             ),
                           ),
@@ -137,8 +135,7 @@ class _UpdatePasswordAdminState extends State<UpdatePasswordAdmin> {
                               ),
                               focusedBorder: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(20),
-                                borderSide: const BorderSide(
-                                    color: Colors.teal, width: 2),
+                                borderSide: const BorderSide(color: Colors.grey, width: 2),
                               ),
                             ),
                           ),
@@ -147,17 +144,14 @@ class _UpdatePasswordAdminState extends State<UpdatePasswordAdmin> {
                             alignment: Alignment.center,
                             child: ElevatedButton(
                               style: ElevatedButton.styleFrom(
-                                backgroundColor: Colors.teal,
-                                padding: const EdgeInsets.symmetric(
-                                    horizontal: 24, vertical: 12),
+                                backgroundColor: Colors.blueGrey,
+                                padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
                                 shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(20),
                                 ),
                                 elevation: 2,
                               ),
-                              onPressed: authViewModel.isLoading
-                                  ? null
-                                  : () => _handlePass(context),
+                              onPressed: authViewModel.isLoading ? null : () => _handlePass(context),
                               child: const Text(
                                 "Xác nhận",
                                 style: TextStyle(
@@ -173,8 +167,7 @@ class _UpdatePasswordAdminState extends State<UpdatePasswordAdmin> {
                     ),
                   ],
                 ),
-                if (authViewModel.isLoading)
-                  const Center(child: CircularProgressIndicator()),
+                if (authViewModel.isLoading) const Center(child: CircularProgressIndicator()),
               ],
             ),
           ),

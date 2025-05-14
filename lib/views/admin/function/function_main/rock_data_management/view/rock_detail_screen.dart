@@ -21,7 +21,7 @@ class _RockDetailScreenState extends State<RockDetailScreen> {
 
   @override
   Widget build(BuildContext context) {
-    Widget _buildImageBox(String? imagePath) {
+    Widget buildImageBox(String? imagePath) {
       return Container(
         width: 64,
         height: 64,
@@ -111,17 +111,17 @@ class _RockDetailScreenState extends State<RockDetailScreen> {
                   children: [
                     Row(
                       children: [
-                        _buildImageBox(widget.rock.hinhAnh?[1]),
+                        buildImageBox(widget.rock.hinhAnh?[1]),
                         const SizedBox(width: 8),
-                        _buildImageBox(widget.rock.hinhAnh?[2]),
+                        buildImageBox(widget.rock.hinhAnh?[2]),
                       ],
                     ),
                     const SizedBox(height: 8),
                     Row(
                       children: [
-                        _buildImageBox(widget.rock.hinhAnh?[3]),
+                        buildImageBox(widget.rock.hinhAnh?[3]),
                         const SizedBox(width: 8),
-                        _buildImageBox(widget.rock.hinhAnh?[4]),
+                        buildImageBox(widget.rock.hinhAnh?[4]),
                       ],
                     )
                   ],

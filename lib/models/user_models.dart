@@ -4,19 +4,19 @@ class UserModels {
   String uid;
   String? fullName;
   String? address;
-  String? email;
+  String email;
   String? avatar;
-  String? role;
-  DateTime? createdAt;
+  String role;
+  DateTime createdAt;
 
   UserModels({
     required this.uid,
     this.fullName,
     this.address,
-    this.email,
+    required this.email,
     this.avatar,
-    this.role,
-    this.createdAt,
+    required this.role,
+    required this.createdAt,
   });
 
   factory UserModels.fromJson(Map<String, dynamic> json) {
@@ -24,10 +24,10 @@ class UserModels {
       uid: json['uid'],
       fullName: json['fullName'] as String?,
       address: json['address'] as String?,
-      email: json['email'] as String?,
+      email: json['email'],
       avatar: json['avatar'] as String?,
-      role: json['role'] as String?,
-      createdAt: (json['createdAt'] as Timestamp?)?.toDate(),
+      role: json['role'],
+      createdAt: (json['createdAt'] as Timestamp).toDate(),
     );
   }
 
@@ -39,7 +39,7 @@ class UserModels {
       'email': email,
       'avatar': avatar,
       'role': role,
-      'createdAt': createdAt?.toIso8601String(), // lưu dạng ISO string
+      'createdAt': Timestamp.fromDate(createdAt), // lưu dạng ISO string
     };
   }
 

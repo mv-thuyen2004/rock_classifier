@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:rock_classifier/Core/widgets/password_Field.dart';
 import 'package:rock_classifier/ModelViews/auth_view_model.dart';
 import 'package:rock_classifier/Views/users/login_and_regis_widget/register_page.dart';
 
@@ -15,6 +14,7 @@ class _LoginPageState extends State<LoginPage> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   bool _isLoading = false;
+  bool _isLoading_icon = false;
 
   void handleLogin(BuildContext context) async {
     setState(() {
@@ -71,9 +71,21 @@ class _LoginPageState extends State<LoginPage> {
                   ),
                 ),
                 const SizedBox(height: 20),
-                PasswordField(
-                  title: "Password của bạn",
+                TextField(
                   controller: _passwordController,
+                  obscureText: _isLoading_icon,
+                  decoration: InputDecoration(
+                    hintText: 'Mật khẩu cảu bạn',
+                    prefixIcon: const Icon(Icons.lock),
+                    suffixIcon: IconButton(
+                      onPressed: () {
+                        setState(() {
+                          _isLoading_icon = !_isLoading_icon;
+                        });
+                      },
+                      icon: Icon(_isLoading_icon ? Icons.visibility : Icons.visibility_off),
+                    ),
+                  ),
                 ),
                 Align(
                   alignment: Alignment.centerRight,

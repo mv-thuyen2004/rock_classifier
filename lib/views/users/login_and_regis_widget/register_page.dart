@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:rock_classifier/Core/widgets/password_Field.dart';
 import 'package:rock_classifier/ModelViews/auth_view_model.dart';
 import 'package:rock_classifier/Views/users/login_and_regis_widget/login_page.dart';
 
@@ -14,8 +13,9 @@ class RegisterPage extends StatefulWidget {
 class _RegisterPageState extends State<RegisterPage> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
-  final TextEditingController _confirmPasswordController =
-      TextEditingController();
+  final TextEditingController _confirmPasswordController = TextEditingController();
+  bool _isLoading_one = false;
+  bool _isLoading_two = false;
 
   @override
   void dispose() {
@@ -41,8 +41,7 @@ class _RegisterPageState extends State<RegisterPage> {
           icon: Icons.check_circle_outline,
           iconColor: Colors.green,
           title: "Đăng kí thành công",
-          message:
-              "Chúc mừng bạn đã tạo tài khoản thành công. \n Nhấn 'Xác nhận' để tiếp tục.",
+          message: "Chúc mừng bạn đã tạo tài khoản thành công. \n Nhấn 'Xác nhận' để tiếp tục.",
           buttonColor: Colors.green,
           onPressed: () {
             Navigator.pop(context);
@@ -102,14 +101,38 @@ class _RegisterPageState extends State<RegisterPage> {
                   ),
                 ),
                 SizedBox(height: MediaQuery.of(context).size.height * 0.025),
-                PasswordField(
+                TextField(
                   controller: _passwordController,
-                  title: "Nhập mật khẩu của bạn",
+                  obscureText: _isLoading_one,
+                  decoration: InputDecoration(
+                    hintText: 'Nhập mật khẩu của bạn',
+                    prefixIcon: const Icon(Icons.lock),
+                    suffixIcon: IconButton(
+                      onPressed: () {
+                        setState(() {
+                          _isLoading_one = !_isLoading_one;
+                        });
+                      },
+                      icon: Icon(_isLoading_one ? Icons.visibility : Icons.visibility_off),
+                    ),
+                  ),
                 ),
                 SizedBox(height: MediaQuery.of(context).size.height * 0.025),
-                PasswordField(
+                TextField(
                   controller: _confirmPasswordController,
-                  title: "Xác nhận lại mật khẩu",
+                  obscureText: _isLoading_two,
+                  decoration: InputDecoration(
+                    hintText: 'Nhập lại mật khẩu của bạn',
+                    prefixIcon: const Icon(Icons.lock),
+                    suffixIcon: IconButton(
+                      onPressed: () {
+                        setState(() {
+                          _isLoading_two = !_isLoading_two;
+                        });
+                      },
+                      icon: Icon(_isLoading_two ? Icons.visibility : Icons.visibility_off),
+                    ),
+                  ),
                 ),
                 SizedBox(height: MediaQuery.of(context).size.height * 0.02),
                 RichText(
@@ -211,24 +234,19 @@ class _RegisterPageState extends State<RegisterPage> {
                         Navigator.push(
                           context,
                           PageRouteBuilder(
-                            pageBuilder:
-                                (context, animation, secondaryAnimation) =>
-                                    const LoginPage(),
-                            transitionsBuilder: (context, animation,
-                                secondaryAnimation, child) {
+                            pageBuilder: (context, animation, secondaryAnimation) => const LoginPage(),
+                            transitionsBuilder: (context, animation, secondaryAnimation, child) {
                               const begin = Offset(1.0, 0.0);
                               const end = Offset.zero;
                               const curve = Curves.ease;
 
-                              var tween = Tween(begin: begin, end: end)
-                                  .chain(CurveTween(curve: curve));
+                              var tween = Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
                               return SlideTransition(
                                 position: animation.drive(tween),
                                 child: child,
                               );
                             },
-                            transitionDuration:
-                                const Duration(milliseconds: 500),
+                            transitionDuration: const Duration(milliseconds: 500),
                           ),
                         );
                       },

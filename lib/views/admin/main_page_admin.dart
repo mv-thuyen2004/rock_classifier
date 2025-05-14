@@ -36,13 +36,13 @@ class _MainPageAdminState extends State<MainPageAdmin> {
     return Scaffold(
       body: _widgetOptions[_selectedIndex],
       bottomNavigationBar: BottomNavigationBar(
+        backgroundColor: Colors.grey[300],
         items: [
           BottomNavigationBarItem(icon: Icon(Icons.home), label: "Trang chủ"),
-          BottomNavigationBarItem(
-              icon: Icon(Icons.person), label: "Người dùng"),
+          BottomNavigationBarItem(icon: Icon(Icons.person), label: "Người dùng"),
         ],
         currentIndex: _selectedIndex,
-        selectedItemColor: Theme.of(context).primaryColor,
+        selectedItemColor: Colors.red,
         unselectedItemColor: Colors.grey[600],
         onTap: _onItemTapped,
       ),

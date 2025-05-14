@@ -126,7 +126,7 @@ class AuthViewModel extends ChangeNotifier {
           uid: user.uid,
           fullName: null,
           address: null,
-          email: user.email,
+          email: email,
           avatar: null,
           role: "User",
           createdAt: DateTime.now(),

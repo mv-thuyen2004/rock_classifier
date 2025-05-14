@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:rock_classifier/ModelViews/auth_view_model.dart';
 import 'package:rock_classifier/Views/admin/function/function_info/update_information_admin.dart';
+import 'package:rock_classifier/Views/users/login_and_regis_widget/login_page.dart';
 
 class InformationPageAdmin extends StatelessWidget {
   const InformationPageAdmin({super.key});
@@ -20,6 +21,7 @@ class InformationPageAdmin extends StatelessWidget {
 
         final user = authViewModel.currentUser!;
         return Scaffold(
+          backgroundColor: Color(0xFFF7F7F7),
           body: SafeArea(
             child: ListView(
               padding: const EdgeInsets.all(16),
@@ -35,9 +37,9 @@ class InformationPageAdmin extends StatelessWidget {
                     ),
                   ),
                 ),
-                const SizedBox(height: 24),
+                const SizedBox(height: 14),
                 CircleAvatar(
-                  radius: 36,
+                  radius: 40,
                   backgroundColor: Colors.teal.shade100,
                   backgroundImage: user.avatar != null ? NetworkImage(user.avatar!) : null,
                   child: user.avatar == null
@@ -48,39 +50,38 @@ class InformationPageAdmin extends StatelessWidget {
                         )
                       : null,
                 ),
-                const SizedBox(height: 12),
+                const SizedBox(height: 10),
                 Text(
-                  user.fullName ?? "User Name",
+                  user.fullName ?? "Bạn chưa đặt tên",
                   style: TextStyle(
                     fontSize: 24,
                     fontWeight: FontWeight.bold,
-                    color: Colors.teal,
+                    color: Colors.black87,
                   ),
                   textAlign: TextAlign.center,
                 ),
                 Text(
-                  user.email ?? "user@example.com",
+                  user.email,
                   style: TextStyle(
                     fontSize: 14,
                     color: Colors.grey.shade700,
                   ),
                   textAlign: TextAlign.center,
                 ),
-                const SizedBox(height: 24),
+                const SizedBox(height: 26),
                 Row(
                   children: [
                     const Icon(
                       Icons.settings,
-                      size: 24,
-                      color: Colors.teal,
+                      color: Colors.grey,
                     ),
-                    const SizedBox(width: 8),
+                    const SizedBox(width: 6),
                     Text(
                       "Cài đặt",
                       style: TextStyle(
-                        fontSize: 20,
+                        fontSize: 18,
                         fontWeight: FontWeight.bold,
-                        color: Colors.teal,
+                        color: Colors.grey,
                       ),
                     ),
                   ],
@@ -101,7 +102,7 @@ class InformationPageAdmin extends StatelessWidget {
                   child: Column(
                     children: [
                       ListTile(
-                        leading: const Icon(Icons.edit, color: Colors.teal),
+                        leading: const Icon(Icons.edit, color: Colors.grey),
                         title: Text(
                           "Chỉnh sửa thông tin cá nhân",
                           style: TextStyle(
@@ -110,7 +111,6 @@ class InformationPageAdmin extends StatelessWidget {
                             color: Colors.black87,
                           ),
                         ),
-                        trailing: const Icon(Icons.arrow_forward_outlined, color: Colors.teal),
                         onTap: () {
                           Navigator.push(
                             context,
@@ -122,7 +122,7 @@ class InformationPageAdmin extends StatelessWidget {
                       ),
                       const Divider(height: 1, color: Color(0xFFF0F0F0)),
                       ListTile(
-                        leading: const Icon(Icons.language, color: Colors.teal),
+                        leading: const Icon(Icons.language, color: Colors.grey),
                         title: Text(
                           "Chuyển sang ngôn ngữ Tiếng Anh",
                           style: TextStyle(
@@ -131,7 +131,6 @@ class InformationPageAdmin extends StatelessWidget {
                             color: Colors.black87,
                           ),
                         ),
-                        trailing: const Icon(Icons.arrow_forward_outlined, color: Colors.teal),
                         onTap: () {
                           ScaffoldMessenger.of(context).showSnackBar(
                             const SnackBar(content: Text('Chức năng đang phát triển')),
@@ -140,7 +139,7 @@ class InformationPageAdmin extends StatelessWidget {
                       ),
                       const Divider(height: 1, color: Color(0xFFF0F0F0)),
                       ListTile(
-                        leading: const Icon(Icons.wb_sunny, color: Colors.teal),
+                        leading: const Icon(Icons.wb_sunny, color: Colors.grey),
                         title: Text(
                           "Chuyển sang giao diện sáng",
                           style: TextStyle(
@@ -149,7 +148,6 @@ class InformationPageAdmin extends StatelessWidget {
                             color: Colors.black87,
                           ),
                         ),
-                        trailing: const Icon(Icons.arrow_forward_outlined, color: Colors.teal),
                         onTap: () {
                           ScaffoldMessenger.of(context).showSnackBar(
                             const SnackBar(content: Text('Chức năng đang phát triển')),
@@ -167,13 +165,17 @@ class InformationPageAdmin extends StatelessWidget {
                       backgroundColor: Colors.redAccent,
                       padding: const EdgeInsets.symmetric(vertical: 12),
                       shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(12),
+                        borderRadius: BorderRadius.circular(20),
                       ),
                       elevation: 2,
                     ),
                     onPressed: () async {
                       await authViewModel.signOut();
-                      Navigator.pushReplacementNamed(context, '/login');
+                      Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => LoginPage(),
+                          ));
                     },
                     child: Text(
                       "Đăng xuất",
