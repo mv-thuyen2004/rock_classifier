@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:rock_classifier/FirebaseService/firebase_service.dart';
@@ -22,7 +23,7 @@ class UserListViewModel extends ChangeNotifier {
   UserModels? get selectedUser => _selectedUser;
 
   // Lấy tất cả người dùng
-  Future<void> fetachUser() async {
+  Future<void> fetchUser() async {
     _isLoading = true;
     _error = null;
     notifyListeners();
@@ -33,6 +34,7 @@ class UserListViewModel extends ChangeNotifier {
     } finally {
       _isLoading = false;
       notifyListeners();
+      print('DU LIEU TRONG USER_LIST_VIEW ${_users.length}');
     }
   }
 
@@ -43,7 +45,7 @@ class UserListViewModel extends ChangeNotifier {
 
     try {
       await _firebaseService.updateUser(user);
-      await fetachUser(); // Cập nhật lại danh sách người dùng nếu cần
+      await fetchUser(); // Cập nhật lại danh sách người dùng nếu cần
     } catch (e) {
       _error = e.toString();
     } finally {
@@ -63,7 +65,7 @@ class UserListViewModel extends ChangeNotifier {
         user.avatar = url;
       }
       await _firebaseService.updateUser(user);
-      await fetachUser();
+      await fetchUser();
     } catch (e) {
       _error = e.toString();
     } finally {
@@ -136,28 +138,37 @@ class UserListViewModel extends ChangeNotifier {
     return null;
   }
 
-  // Thêm người dùng không có ảnh
   Future<void> addUserWithoutAvatar(UserModels user) async {
     try {
+      UserCredential result = await _firebaseService.createUserWithEmailAndPassword(
+        email: user.email,
+        password: 'tnanh1407', // Có thể thay bằng mật khẩu nhập từ form
+      );
+
+      user.uid = result.user!.uid;
+
       await _firebaseService.addUser(user);
-      notifyListeners(); // Thông báo UI cập nhật nếu cần
+
+      notifyListeners();
     } catch (e) {
       throw Exception('Lỗi khi thêm người dùng (không có ảnh): $e');
     }
   }
 
-  // Thêm người dùng có ảnh
   Future<void> addUserWithAvatar(UserModels user, File image) async {
     try {
-      // Upload ảnh và lấy URL ảnh
+      UserCredential result = await _firebaseService.createUserWithEmailAndPassword(email: user.email, password: 'tnanh1407');
+
+      user.uid = result.user!.uid;
+
       final avatarUrl = await _firebaseService.uploadAvatar(image, user.uid);
 
       if (avatarUrl != null) {
-        // Cập nhật avatar cho user
         user.avatar = avatarUrl;
-        // Gọi hàm addUser của FirebaseService để thêm user vào Firestore
+
         await _firebaseService.addUser(user);
-        notifyListeners(); // Thông báo UI cập nhật nếu cần
+
+        notifyListeners();
       } else {
         throw Exception('Không thể tải ảnh lên Firebase Storage');
       }

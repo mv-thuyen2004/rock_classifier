@@ -15,6 +15,8 @@ class FirebaseService {
   FirebaseFirestore get firestore => _firestore;
   FirebaseStorage get storage => _storage;
 
+  get snapshot => null;
+
   // Đăng kí tài khoản
   Future<UserCredential> createUserWithEmailAndPassword({required String email, required String password}) async {
     try {
@@ -41,16 +43,19 @@ class FirebaseService {
     await _auth.signOut();
   }
 
-// Lấy danh sách người dùng
   Future<List<UserModels>> getUsers() async {
     try {
       final snapshot = await _firestore.collection('users').get();
-      return snapshot.docs
-          .map((doc) => UserModels.fromJson({
-                ...doc.data(),
-                'uid': doc.id,
-              }))
-          .toList();
+      print("Tổng số documents: ${snapshot.docs.length}");
+      final users = snapshot.docs.map((doc) {
+        final data = doc.data();
+        print("Dữ liệu người dùng: $data");
+        return UserModels.fromJson({
+          ...data,
+          'uid': doc.id,
+        });
+      }).toList();
+      return users;
     } catch (e) {
       throw Exception('Lỗi khi lấy danh sách người dùng: $e');
     }

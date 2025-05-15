@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:rock_classifier/ModelViews/auth_view_model.dart';
 import 'package:rock_classifier/Views/admin/function/function_info/update_information_admin.dart';
+import 'package:rock_classifier/Views/admin/function/function_interface/interface_language/language_screen.dart';
 import 'package:rock_classifier/Views/users/login_and_regis_widget/login_page.dart';
 
 class InformationPageAdmin extends StatelessWidget {
@@ -132,9 +133,11 @@ class InformationPageAdmin extends StatelessWidget {
                           ),
                         ),
                         onTap: () {
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(content: Text('Chức năng đang phát triển')),
-                          );
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => LanguageScreen(),
+                              ));
                         },
                       ),
                       const Divider(height: 1, color: Color(0xFFF0F0F0)),

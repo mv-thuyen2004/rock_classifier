@@ -66,17 +66,11 @@ class AuthViewModel extends ChangeNotifier {
         _setLoading(false);
         notifyListeners();
 
-        if (isAdmin()) {
+        if (isAdmin() || isSuperUser()) {
           Navigator.pushReplacement(
               context,
               MaterialPageRoute(
                 builder: (context) => MainPageAdmin(),
-              ));
-        } else if (isSuperClass()) {
-          Navigator.pushReplacement(
-              context,
-              MaterialPageRoute(
-                builder: (context) => HomePageUser(),
               ));
         } else if (isUser()) {
           Navigator.pushReplacement(
@@ -286,6 +280,6 @@ class AuthViewModel extends ChangeNotifier {
   }
 
   bool isAdmin() => _currentUserRole == 'Admin';
-  bool isSuperClass() => _currentUserRole == 'Super-Class';
+  bool isSuperUser() => _currentUserRole == 'Super-User';
   bool isUser() => _currentUserRole == 'User';
 }

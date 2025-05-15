@@ -27,7 +27,7 @@ class UserModels {
       email: json['email'],
       avatar: json['avatar'] as String?,
       role: json['role'],
-      createdAt: (json['createdAt'] as Timestamp).toDate(),
+      createdAt: (json['createdAt'] as Timestamp?)?.toDate() ?? DateTime.now(),
     );
   }
 

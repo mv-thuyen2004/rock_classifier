@@ -1,8 +1,5 @@
 import 'dart:io';
-import 'dart:math';
-
 import 'package:flutter/material.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 import 'package:rock_classifier/ModelViews/rock_view_model.dart';
 import 'package:rock_classifier/Views/admin/function/function_main/rock_data_management/view/rock_detail_screen.dart';
@@ -234,10 +231,11 @@ class _RockListScreenState extends State<RockListScreen> {
                                 ),
                                 onTap: () {
                                   Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                        builder: (context) => RockDetailScreen(rock: rock),
-                                      ));
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => RockDetailScreen(rock: rock),
+                                    ),
+                                  );
                                 },
                               ),
                             );
@@ -261,40 +259,4 @@ class _RockListScreenState extends State<RockListScreen> {
       ),
     );
   }
-}
-
-void showAddRockBottomSheet(BuildContext context) {
-  final tenDa = TextEditingController();
-  final loaiDa = TextEditingController();
-  final thanhPhanHoaHoc = TextEditingController();
-  final doCung = TextEditingController();
-  final mauSac = TextEditingController();
-  final moTa = TextEditingController();
-  final dacDiem = TextEditingController();
-  final nhomDa = TextEditingController();
-  final matDo = TextEditingController();
-  final kienTruc = TextEditingController();
-  final thanhPhanKhoangSan = TextEditingController();
-  final congDungKhoangSan = TextEditingController();
-  final noiPhanBo = TextEditingController();
-  final motSoKhoangSanLienQuan = TextEditingController();
-  final cauTao = TextEditingController();
-  // Câu hỏi
-  final cauHoiSo1 = TextEditingController();
-  final cauHoiSo2 = TextEditingController();
-  final cauHoiSo3 = TextEditingController();
-  final cauhoiso4 = TextEditingController();
-  // Câu trả lời
-  final traLoi1 = TextEditingController();
-  final traLoi2 = TextEditingController();
-  final traLoi3 = TextEditingController();
-  final traLoi4 = TextEditingController();
-
-  //hinh anh
-  File? hinhanh1;
-  File? hinhanh2;
-  File? hinhanh3;
-  File? hinhanh4;
-  File? hinhanh5;
-  //
 }

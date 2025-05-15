@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:rock_classifier/ModelViews/auth_view_model.dart';
+import 'package:rock_classifier/Views/admin/function/function_main/news_data_management/view/news_data_management.dart';
 import 'package:rock_classifier/Views/admin/function/function_main/rock_data_management/view/rock_list_screen.dart';
 import 'package:rock_classifier/Views/admin/function/function_main/user_data_management/View/user_data_management.dart';
 
@@ -31,7 +32,7 @@ class HomePageAdmin extends StatelessWidget {
                   Align(
                     alignment: Alignment.center,
                     child: Text(
-                      'Trang chủ Admin',
+                      'Trang chủ ${user.role}',
                       style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600, color: Colors.black87),
                     ),
                   ),
@@ -167,7 +168,14 @@ class HomePageAdmin extends StatelessWidget {
                   SizedBox(height: 16),
                   FunctionButton(
                     title: 'Quản lí bài viết',
-                    onTap: () {},
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => NewsDataManagement(),
+                        ),
+                      );
+                    },
                   ),
                 ],
               ),
